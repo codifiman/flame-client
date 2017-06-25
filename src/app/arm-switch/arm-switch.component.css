@@ -1,0 +1,21 @@
+:host > div {
+  border: solid 1px var(--grey);
+  border-radius: 5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10em;
+  height: 10em;
+}
+
+:host .armed {
+  color: red;
+}
+
+:host .blocked {
+  color: var(--grey);
+}
+
+:host .ready {
+  color: purple;
+}
