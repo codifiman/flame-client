@@ -1,11 +1,39 @@
+:host {
+  --diameter: 10em;
+}
+
 :host > div {
   border: solid 1px var(--grey);
   border-radius: 5em;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10em;
-  height: 10em;
+  width: var(--diameter);
+  height: var(--diameter);
+  position: relative;
+  transition: all 0.2s;
+}
+
+:host > div.ready::before {
+  --inner-diameter-1: calc(0.75 * var(--diameter));
+
+  content: '';
+  display: inline-block;
+  position: absolute;
+  width: var(--inner-diameter-1);
+  height: var(--inner-diameter-1);
+  border-radius: calc(0.5 * var(--inner-diameter-1));
+  /*background: radial-gradient(circle, hsla(0, 0%, 85%, 1) 0%, transparent 70%);*/
+  transition: all 0.2s;
+  opacity: 0;
+}
+
+:host > div:hover::before {
+  opacity: 1;
+}
+
+:host > div:hover {
+  box-shadow: 0px 0px 15px hsla(0, 0%, 50%, 0.5);
 }
 
 :host .armed {
@@ -18,4 +46,15 @@
 
 :host .ready {
   color: purple;
+}
+
+:host h3 {
+  text-transform: uppercase;
+  user-select: none;
+  font-size: 3em;
+  font-weight: 100;
+}
+
+:host:hover, :host *:hover {
+  cursor: pointer;
 }
