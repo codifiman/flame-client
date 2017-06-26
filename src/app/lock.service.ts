@@ -1,10 +1,9 @@
 // lock service
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
-import { FlameAPIService } from './flame-api.service';
 import { ClientTokenService } from './client-token.service';
+import { FlameAPIService } from './flame-api.service';
 
 export const LOCKED = 'LOCKED';
 export const UNLOCKED = 'UNLOCKED';
@@ -17,24 +16,26 @@ interface LockState {
 @Injectable()
 export class LockService {
   private lockPath = '/burner/lock';
-  private clientToken = '';
   private lock = {
     lockId: '',
     state:  LOCKED
   };
 
   constructor (
-    private clientTokenService: ClientTokenService,
+    private token: ClientTokenService,
     private flameAPI: FlameAPIService
   ) {
-    this.clientToken = clientTokenService.clientToken;
-    this.getLockStatus()
-    .subscribe((lock) => this.lock = lock);
+    this.getLockStatus();
+  }
+
+  private getLockStatus(): void {
+    this.flameAPI.get(this.lockPath)
+      .subscribe((lock) => Object.assign(this.lock, lock));
   }
 
   // Queries
   public get isLockedByUser(): boolean {
-    return this.lock.lockId === this.clientToken;
+    return this.lock.lockId === this.token.clientToken;
   }
 
   public get isLockedByOtherUser(): boolean {
@@ -45,24 +46,22 @@ export class LockService {
     return this.lock.state === LOCKED
   }
 
-  public get lockThing(): object {
-    return this.lock;
-  }
-
   public get lockState(): string {
     return this.lock.state;
   }
 
-  private getLockStatus(): Observable<LockState> {
-    //return this.flameAPI.post('/burner/channel/0', { state: true, lockId: '1234567890' });
-    return this.flameAPI.get(this.lockPath)
+  public resetLock(): void {
+    this.lock = {
+      state:  UNLOCKED,
+      lockId: ''
+    };
   }
 
   // Actions
   public arm(): void {
     const payload = {
       state:  LOCKED,
-      lockId: this.clientToken
+      lockId: this.token.clientToken
     };
 
     console.log("arming device", payload);
@@ -78,7 +77,7 @@ export class LockService {
   public disarm(): void {
     const payload = {
       state:  UNLOCKED,
-      lockId: this.clientToken,
+      lockId: this.token.clientToken,
     };
 
     console.log("disarming device", payload);
