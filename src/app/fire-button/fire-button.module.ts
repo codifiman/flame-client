@@ -1,7 +1,11 @@
-// arm-switch.module
+// fire-button.module
 import { NgModule } from '@angular/core';
 
-@NgModule({
+import { FireService } from './fire.service';
 
+@NgModule({
+  providers: [
+    FireService
+  ]
 })
-export class ArmSwitchModule { }
+export class FireModule { }

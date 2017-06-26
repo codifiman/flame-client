@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { ArmSwitchComponent } from './arm-switch/arm-switch.component';
 import { FireButtonComponent } from './fire-button/fire-button.component';
 
+import { FireModule } from './fire-button/fire-button.module';
+
 import { ClientTokenService } from './client-token.service';
 import { LockService } from './lock.service';
 import { FlameAPIService } from './flame-api.service';
@@ -14,11 +16,12 @@ import { FlameAPIService } from './flame-api.service';
   declarations: [
     AppComponent,
     ArmSwitchComponent,
-    FireButtonComponent,
+    FireButtonComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    FireModule,
   ],
   providers: [
     LockService,
