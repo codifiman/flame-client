@@ -11,9 +11,7 @@ import { LockService, LOCKED, UNLOCKED } from '../lock.service';
 export class ArmSwitchComponent {
   constructor(private lockService: LockService) { }
 
-  get buttonClasses() {
-    console.log('lock', this.lockService.lockThing);
-
+  get buttonClasses(): object {
     return {
       armed:   this.lockService.isLockedByUser,
       blocked: this.lockService.isLockedByOtherUser,
@@ -21,9 +19,16 @@ export class ArmSwitchComponent {
     };
   }
 
-  private toggleButton() {
+  get buttonText(): string {
+    if (this.lockService.isLockedByUser === true) { return 'Off'; }
+    else if (this.lockService.isLockedByOtherUser) { return 'Busy'; }
+    else { return 'Arm'; }
+  }
+
+  private toggleButton(): void {
     if (!this.lockService.isLocked) {
       this.lockService.arm();
+      setTimeout(this.lockService.resetLock.bind(this.lockService), 5000);
     }
     else if (this.lockService.isLockedByUser) {
       this.lockService.disarm();
