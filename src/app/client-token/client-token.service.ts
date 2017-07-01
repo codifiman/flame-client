@@ -1,6 +1,6 @@
 // client token service
 import { Injectable } from '@angular/core';
-import uuidv4 from 'uuid/v4';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class ClientTokenService {
@@ -11,8 +11,12 @@ export class ClientTokenService {
     let token = window.localStorage.getItem('token');
 
     // If no token in storage, generate one and stuff it in localStorage
+    console.log('token', token);
+
     if (!token) {
-      token = uuidv4();
+      console.log('no token', token);
+      token = v4();
+      console.log('token', token);
       window.localStorage.setItem('token', token);
     }
 

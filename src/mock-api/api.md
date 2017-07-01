@@ -32,7 +32,7 @@ Request a lock on the system
 + Request (application/json)
   {
     "state": "LOCKED",
-    "lockId": "699660c8-13b6-43af-b7f9-095a0e2c2837"
+    "lockId": "481e282c-3bdc-44a0-ab65-2d3e426ac9fd"
   }
 
 + Schema
@@ -58,7 +58,7 @@ Request a release of a lock
 + Request (application/json)
   {
     "state":  "UNLOCKED",
-    "lockId": "699660c8-13b6-43af-b7f9-095a0e2c2837"
+    "lockId": "481e282c-3bdc-44a0-ab65-2d3e426ac9fd"
   }
 
 + Schema
@@ -89,7 +89,7 @@ Turn on a flamethrower
 + Request (application/json)
   {
     "state": true,
-    "lockId": "699660c8-13b6-43af-b7f9-095a0e2c2837"
+    "lockId": "481e282c-3bdc-44a0-ab65-2d3e426ac9fd"
   }
 
 + Schema
@@ -116,7 +116,7 @@ Turn off a flamethrower
 + Request (application/json)
   {
     "state": false,
-    "lockId": "699660c8-13b6-43af-b7f9-095a0e2c2837"
+    "lockId": "481e282c-3bdc-44a0-ab65-2d3e426ac9fd"
   }
 
 + Schema
