@@ -4,7 +4,7 @@ import "rxjs/add/observable/of";
 
 fdescribe('LockService', () => {
   describe('arm', () => {
-    it("should update the lock state", () => {
+    it("should update the lock state", (done) => {
       const api = {
         post: () => Observable.of({ status: 200 }),
         get: () => Observable.of({ state: UNLOCKED }),
@@ -12,11 +12,12 @@ fdescribe('LockService', () => {
       const lock = new LockService(<any>{}, <any>api);
 
       lock.arm()
-        .subscribe(null, null, () => (
+        .subscribe(null, null, () => {
           expect(lock.lockState).toEqual(LOCKED)
-        ));
+          done();
+        });
     });
-    it("shouldn't change the state of the lock on an error", () => {
+    it("shouldn't change the state of the lock on an error", (done) => {
       const api = {
         post: () => Observable.of({ status: 409 }),
         get: () => Observable.of({ state: UNLOCKED }),
@@ -24,9 +25,10 @@ fdescribe('LockService', () => {
       const lock = new LockService(<any>{}, <any>api);
 
       lock.arm()
-        .subscribe(null, null, () => (
+        .subscribe(null, null, () => {
           expect(lock.lockState).toEqual(UNLOCKED)
-        ));
+          done();
+        });
     });
   })
 
