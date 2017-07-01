@@ -8,9 +8,9 @@ import { FireButtonComponent } from './fire-button/fire-button.component';
 
 import { FireModule } from './fire-button/fire-button.module';
 
-import { ClientTokenService } from './client-token.service';
-import { LockService } from './lock.service';
-import { FlameAPIService } from './flame-api.service';
+import { ClientTokenService } from './client-token/client-token.service';
+import { LockService } from './lock/lock.service';
+import { FlameAPIService } from './flame-api/flame-api.service';
 
 @NgModule({
   declarations: [

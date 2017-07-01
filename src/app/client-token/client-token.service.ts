@@ -6,11 +6,6 @@ import uuidv4 from 'uuid/v4';
 export class ClientTokenService {
   private token = '';
 
-  constructor() {
-    this.token = this.initToken();
-    console.log('token', this.token);
-  }
-
   private initToken() {
     // Fetch a potentially-existing token from localStorage
     let token = window.localStorage.getItem('token');
@@ -25,6 +20,10 @@ export class ClientTokenService {
   }
 
   get clientToken() {
+    if (!this.token) {
+      this.token = this.initToken();
+    }
+
     return this.token;
   }
 }

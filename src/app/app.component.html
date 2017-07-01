@@ -1,5 +1,5 @@
 <div>
-  <f-arm-switch></f-arm-switch>
+  <f-arm-switch [lock]="lock.lockState" (onEvent)="handleArmEvent($event)"></f-arm-switch>
   <div class="fire-buttons">
     <f-fire-button channel='0'></f-fire-button>
     <f-fire-button channel='1'></f-fire-button>

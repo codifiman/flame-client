@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { ClientTokenService } from '../client-token.service';
-import { FlameAPIService } from '../flame-api.service';
+import { ClientTokenService } from '../client-token/client-token.service';
+import { FlameAPIService } from '../flame-api/flame-api.service';
 
 @Injectable()
 export class FireService {
