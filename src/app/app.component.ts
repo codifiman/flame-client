@@ -10,13 +10,8 @@ import { FireService } from './fire/fire.service';
 })
 export class AppComponent {
   title = 'app';
-  lock: LockService;
-  fire: FireService;
 
-  constructor(lock: LockService, fire: FireService) {
-    this.lock = lock;
-    this.fire = fire;
-  }
+  constructor(private lock: LockService, private fire: FireService) { }
 
   private handleArmEvent(event): void {
     this.lock.setLock(event);
