@@ -30,7 +30,14 @@ export class FireButtonComponent {
     };
   }
 
-  private turnOn(): void {
+  private prevent(e): void {
+    e.preventDefault && e.preventDefault();
+    e.stopPropagation && e.stopPropagation();
+  }
+
+  private turnOn(event): void {
+    this.prevent(event);
+
     if (this.lock === LOCKED && !this.channelOn) {
       this.onEvent.emit({ channel: this.channel, action: FIRE });
       this.channelOn = true;
@@ -38,7 +45,9 @@ export class FireButtonComponent {
     }
   }
 
-  private turnOff(): void {
+  private turnOff(event): void {
+    this.prevent(event);
+
     if (this.lock === LOCKED && this.channelOn) {
       this.onEvent.emit({ channel: this.channel, action: RELEASE });
       this.channelOn = false;
