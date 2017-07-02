@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/concatMap';
+
 import { ClientTokenService } from '../client-token/client-token.service';
 import { FlameAPIService } from '../flame-api/flame-api.service';
 
@@ -29,21 +32,38 @@ export class LockService {
   private lockpath = '/burner/lock';
   private lockstate = UNLOCKED;
   private timeout;
+  private lockCheckStream: Observable<Response>;
 
   constructor (
     private token: ClientTokenService,
     private flameAPI: FlameAPIService
   ) {
     this.getLockStatus();
+
+    this.lockCheckStream = Observable
+      .interval(1000)
+      .concatMap(() => this.flameAPI.get(this.lockpath))
   }
 
   private getLockStatus(): void {
     this.flameAPI.get(this.lockpath)
       .subscribe(res => {
-        this.lockstate = res.data.state === LOCKED
-          ? LOCKED_OUT
-          : UNLOCKED;
-        });
+        if (res.data.state === LOCKED) {
+          this.lockstate = LOCKED_OUT;
+          this.pollUntilAvailable();
+        } else {
+          this.lockstate = UNLOCKED;
+        }
+      });
+  }
+
+  private pollUntilAvailable(): void {
+    const subscription = this.lockCheckStream.subscribe(res => {
+      if (res['data'].state === UNLOCKED) {
+        this.lockstate = UNLOCKED;
+        subscription.unsubscribe();
+      }
+    })
   }
 
   public startTimeout(): void {
@@ -96,8 +116,12 @@ export class LockService {
     const obs = this.flameAPI.post(this.lockpath, payload);
     obs.subscribe(
       res => this.lockstate = payload.state,
-      res => res.status === 409 && (this.lockstate = LOCKED_OUT)
-    )
+      res => {
+        if (res.status === 409) {
+          this.lockstate = LOCKED_OUT;
+          this.pollUntilAvailable();
+        }
+      })
     return obs;
   }
 }
