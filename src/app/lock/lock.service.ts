@@ -24,8 +24,8 @@ export const RESET: LockEvent = 'RESET';
 
 @Injectable()
 export class LockService {
-  private lockpath: string = '/burner/lock';
-  private lockstate: LockState = UNLOCKED;
+  private lockpath = '/burner/lock';
+  private lockstate = UNLOCKED;
   private timeout;
 
   constructor (
