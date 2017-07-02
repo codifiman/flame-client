@@ -1,14 +1,10 @@
 // arm-switch.component
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { LOCKED, UNLOCKED } from '../lock/lock.service';
+import { LOCKED, UNLOCKED, ARM, DISARM, RESET } from '../lock/lock.service';
 
 type LockState = 'LOCKED' | 'UNLOCKED';
 type Action = 'ARM' | 'DISARM' | 'RESET';
-
-export const ARM = 'ARM';
-export const DISARM = 'DISARM';
-export const RESET = 'RESET';
 
 @Component({
   selector:    'f-arm-switch',
@@ -21,8 +17,8 @@ export class ArmSwitchComponent {
 
   get buttonClasses(): object {
     return {
-      armed:   this.lock === LOCKED,
-      ready:   this.lock === UNLOCKED,
+      armed: this.lock === LOCKED,
+      ready: this.lock === UNLOCKED,
     };
   }
 
@@ -37,7 +33,6 @@ export class ArmSwitchComponent {
     }
     else {
       this.onEvent.emit(ARM);
-      setTimeout(() => this.onEvent.emit(RESET), 5000);
     }
   }
 }

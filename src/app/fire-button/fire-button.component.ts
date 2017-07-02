@@ -1,7 +1,15 @@
 // fire-button.component
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { FireService } from './fire.service';
+import { LOCKED, UNLOCKED } from '../lock/lock.service';
+import { FIRE, RELEASE, RESET } from '../fire/fire.service';
+
+type ChannelState = boolean;
+type LockState = 'LOCKED' | 'UNLOCKED';
+interface Action {
+  channel: number,
+  action:  'FIRE' | 'RELEASE'
+};
 
 @Component({
   selector:    'f-fire-button',
@@ -9,21 +17,31 @@ import { FireService } from './fire.service';
   styleUrls:   ['./fire-button.component.css']
 })
 export class FireButtonComponent {
-  private state = false;
+  channelOn: ChannelState = false;
+
+  @Input() lock: LockState;
   @Input() channel: number;
+  @Output() onEvent = new EventEmitter<Action>();
 
-  constructor(private fire: FireService) { }
+  private get buttonClasses(): object {
+    return {
+      armed: this.lock === LOCKED,
+      on:    this.channelOn,
+    };
+  }
 
-  toggleChannel() {
-    if (this.state) {
-    // Turn button off
-      this.fire.turnChannelOff(this.channel)
-        .subscribe((res) => console.log('off response', res));
+  private turnOn(): void {
+    if (this.lock === LOCKED && !this.channelOn) {
+      this.onEvent.emit({ channel: this.channel, action: FIRE });
+      this.channelOn = true;
+      setTimeout(() => this.channelOn = false, 8000);
+    }
+  }
 
-    } else {
-    // Turn button on
-      this.fire.turnChannelOn(this.channel)
-        .subscribe((res) => console.log('on response', res));
+  private turnOff(): void {
+    if (this.lock === LOCKED && this.channelOn) {
+      this.onEvent.emit({ channel: this.channel, action: RELEASE });
+      this.channelOn = false;
     }
   }
 }

@@ -7,7 +7,7 @@ fdescribe('LockService', () => {
     it("should update the lock state", (done) => {
       const api = {
         post: () => Observable.of({ status: 200 }),
-        get: () => Observable.of({ state: UNLOCKED }),
+        get: () => Observable.of({ status: 200, data: { state: UNLOCKED }}),
       };
       const lock = new LockService(<any>{}, <any>api);
 

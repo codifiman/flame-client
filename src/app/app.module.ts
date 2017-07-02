@@ -6,11 +6,10 @@ import { AppComponent } from './app.component';
 import { ArmSwitchComponent } from './arm-switch/arm-switch.component';
 import { FireButtonComponent } from './fire-button/fire-button.component';
 
-import { FireModule } from './fire-button/fire-button.module';
-
 import { ClientTokenService } from './client-token/client-token.service';
 import { LockService } from './lock/lock.service';
 import { FlameAPIService } from './flame-api/flame-api.service';
+import { FireService } from './fire/fire.service';
 
 @NgModule({
   declarations: [
@@ -21,12 +20,12 @@ import { FlameAPIService } from './flame-api/flame-api.service';
   imports: [
     BrowserModule,
     HttpModule,
-    FireModule,
   ],
   providers: [
     LockService,
     ClientTokenService,
     FlameAPIService,
+    FireService,
   ],
   bootstrap: [AppComponent]
 })

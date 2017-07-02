@@ -11,12 +11,8 @@ export class ClientTokenService {
     let token = window.localStorage.getItem('token');
 
     // If no token in storage, generate one and stuff it in localStorage
-    console.log('token', token);
-
     if (!token) {
-      console.log('no token', token);
       token = v4();
-      console.log('token', token);
       window.localStorage.setItem('token', token);
     }
 

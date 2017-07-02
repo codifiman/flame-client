@@ -1,9 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css?family=Catamaran:100,400');
+@font-face {
+  font-family: 'Catamaran';
+  src:         url('/assets/fonts/Catamaran-Light.ttf');
+}
 
 html {
   /* colors */
   --grey: hsl(0, 0%, 85%);
+  --blue: hsl(200, 60%, 80%);
+  --orange: hsl(20, 80%, 85%);
+  --red: hsl(0, 80%, 50%);
 
   /* typography */
   font-family: 'Catamaran', sans-serif;

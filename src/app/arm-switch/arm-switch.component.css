@@ -1,60 +1,41 @@
 :host {
-  --diameter: 10em;
+  display: block;
+  width: 100%;
 }
 
-:host > div {
-  border: solid 1px var(--grey);
-  border-radius: 5em;
+:host #slide {
+  border-radius: 0.35em;
+  border: solid 0.1em var(--blue);
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: var(--diameter);
-  height: var(--diameter);
+  height: 0.5em;
+  margin: 2em 0;
   position: relative;
-  transition: all 0.2s;
+  transition: all 0.5s;
+  width: 100%;
 }
 
-:host > div.ready::before {
-  --inner-diameter-1: calc(0.75 * var(--diameter));
-
-  content: '';
-  display: inline-block;
+:host #slider {
+  background-color: white;
+  border: solid 0.1em var(--blue);
+  border-radius: 1.6em;
+  box-shadow: 0px 3px 3px hsla(0, 0%, 20%, 0.2);
+  height: 3em;
   position: absolute;
-  width: var(--inner-diameter-1);
-  height: var(--inner-diameter-1);
-  border-radius: calc(0.5 * var(--inner-diameter-1));
-  /*background: radial-gradient(circle, hsla(0, 0%, 85%, 1) 0%, transparent 70%);*/
-  transition: all 0.2s;
-  opacity: 0;
+  right: calc(100% - 3.15em);
+  transition: all 0.5s;
+  width: 3em;
 }
 
-:host > div:hover::before {
-  opacity: 1;
+.armed #slider {
+  border-color: var(--orange);
+  right: 0;
 }
 
-:host > div:hover {
-  box-shadow: 0px 0px 15px hsla(0, 0%, 50%, 0.5);
+.armed #slide {
+  border-color: var(--orange);
 }
 
-:host .armed {
-  color: red;
-}
-
-:host .blocked {
-  color: var(--grey);
-}
-
-:host .ready {
-  color: purple;
-}
-
-:host h3 {
-  text-transform: uppercase;
-  user-select: none;
-  font-size: 3em;
-  font-weight: 100;
-}
-
-:host:hover, :host *:hover {
-  cursor: pointer;
+h3 {
+  text-align: center;
 }

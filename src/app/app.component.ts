@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ClientTokenService } from './client-token/client-token.service';
 import { LockService } from './lock/lock.service';
-import { ARM, DISARM } from './arm-switch/arm-switch.component';
+import { FireService } from './fire/fire.service';
 
 @Component({
   selector: 'app-root',
@@ -10,21 +10,19 @@ import { ARM, DISARM } from './arm-switch/arm-switch.component';
 })
 export class AppComponent {
   title = 'app';
-  lock;
+  lock: LockService;
+  fire: FireService;
 
-  constructor(lock: LockService) {
+  constructor(lock: LockService, fire: FireService) {
     this.lock = lock;
+    this.fire = fire;
   }
 
   private handleArmEvent(event): void {
-    if (event === ARM) {
-      this.lock.arm();
-    }
-    else if (event === DISARM) {
-      this.lock.disarm();
-    }
-    else {
-      this.lock.reset();
-    }
+    this.lock.setLock(event);
+  }
+
+  private handleFireEvent({ channel, action }): void {
+    this.fire.setChannel(channel, action);
   }
 }

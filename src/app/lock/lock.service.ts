@@ -7,19 +7,26 @@ import { ClientTokenService } from '../client-token/client-token.service';
 import { FlameAPIService } from '../flame-api/flame-api.service';
 
 type LockState = 'LOCKED' | 'UNLOCKED';
+type LockEvent = 'ARM' | 'DISARM' | 'RESET';
 
 interface LockStatusResponse {
-  state: LockState
+  status: number,
+  data:   {
+    state: LockState
+  },
 };
 
 export const LOCKED: LockState = 'LOCKED';
 export const UNLOCKED: LockState = 'UNLOCKED';
-
+export const ARM: LockEvent = 'ARM';
+export const DISARM: LockEvent = 'DISARM';
+export const RESET: LockEvent = 'RESET';
 
 @Injectable()
 export class LockService {
   private lockpath: string = '/burner/lock';
-  private lockstate: LockState = LOCKED;
+  private lockstate: LockState = UNLOCKED;
+  private timeout;
 
   constructor (
     private token: ClientTokenService,
@@ -30,20 +37,47 @@ export class LockService {
 
   private getLockStatus(): void {
     this.flameAPI.get(this.lockpath)
-      .subscribe((res: LockStatusResponse) => {
-        this.lockstate = res.state;
+      .subscribe((res) => {
+        if (res.status === 200) {
+          this.lockstate = res.data.state;
+        }
       });
+  }
+
+  public startTimeout(): void {
+    console.log('starting timeout');
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    this.timeout = setTimeout(() => this.lockstate = UNLOCKED, 10000);
+  }
+
+  public stopTimeout(): void {
+    console.log('stopping timeout');
+    clearTimeout(this.timeout);
   }
 
   public get lockState(): LockState {
     return this.lockstate;
   }
 
-  public reset(): void {
-    this.lockstate = UNLOCKED;
+  // Actions
+  public setLock(event: LockEvent): void {
+    if (event === ARM) {
+      this.arm();
+      this.startTimeout();
+    }
+
+    else if (event === DISARM) {
+      this.disarm();
+    }
+
+    else {
+      this.lockstate = UNLOCKED;
+    }
   }
 
-  // Actions
   public arm(): Observable<Response> {
     const payload = {
       state:  LOCKED,

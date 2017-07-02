@@ -1,3 +1,8 @@
-<div (click)="toggleChannel()">
-  <h3>FIRE</h3>
+<div
+  [ngClass]="buttonClasses"
+  (mousedown)="turnOn()"
+  (mouseup)="turnOff()"
+  (touchstart)="turnOn()"
+  (touchend)="turnOff()">
+  <h3>{{channel + 1}}</h3>
 </div>
