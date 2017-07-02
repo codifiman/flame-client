@@ -1,7 +1,7 @@
 // arm-switch.component
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { LOCKED, UNLOCKED, ARM, DISARM, RESET } from '../lock/lock.service';
+import { LOCKED, UNLOCKED, LOCKED_OUT, ARM, DISARM, RESET } from '../lock/lock.service';
 
 type LockState = 'LOCKED' | 'UNLOCKED';
 type Action = 'ARM' | 'DISARM' | 'RESET';
@@ -15,23 +15,24 @@ export class ArmSwitchComponent {
   @Input() lock: LockState;
   @Output() onEvent = new EventEmitter<Action>();
 
-  get buttonClasses(): object {
+  get buttonClasses() {
     return {
       armed: this.lock === LOCKED,
       ready: this.lock === UNLOCKED,
+      lockedout: this.lock === LOCKED_OUT
     };
   }
 
   get buttonText(): string {
-    if (this.lock === LOCKED) { return 'Off'; }
-    else { return 'Arm'; }
+    return this.lock === LOCKED ? 'Off' : 'Arm';
   }
 
   private toggleButton(): void {
+    if (this.lock === LOCKED_OUT) return
+
     if (this.lock === LOCKED) {
       this.onEvent.emit(DISARM);
-    }
-    else {
+    } else {
       this.onEvent.emit(ARM);
     }
   }
