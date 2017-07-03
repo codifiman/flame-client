@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { ClientTokenService } from '../client-token/client-token.service';
 import { FlameAPIService } from '../flame-api/flame-api.service';
 import { LockService } from '../lock/lock.service';
+import { TimeoutService } from '../timeout.service';
 
 export const FIRE = 'FIRE';
 export const RELEASE = 'RELEASE';
@@ -19,6 +20,7 @@ export class FireService {
     private token: ClientTokenService,
     private flameAPI: FlameAPIService,
     private lock: LockService,
+    private timeoutService: TimeoutService
   ) { }
 
   private getPath(channel) {
@@ -26,18 +28,11 @@ export class FireService {
   }
 
   public setChannel(channel, action): void {
+    this.timeoutService.resetTimeout();
     if (action === FIRE) {
       this.turnChannelOn(channel);
-      this.lock.stopTimeout();
-    }
-
-    else if (action === RELEASE) {
+    } else if (action === RELEASE) {
       this.turnChannelOff(channel);
-      this.lock.startTimeout();
-    }
-
-    else {
-      this.lock.startTimeout();
     }
   }
 
@@ -48,14 +43,8 @@ export class FireService {
       lockId: this.token.clientToken
     };
 
-    console.log(`Turning on channel ${channel}.`, payload);
-
     const postChannelOn = this.flameAPI.post(path, payload);
-    postChannelOn.subscribe((res: Response) => {
-      if (res.status === 200) {
-        console.log('Channel successfully turned on.');
-      }
-    });
+    postChannelOn.subscribe();
 
     return postChannelOn;
   }
@@ -67,14 +56,8 @@ export class FireService {
       lockId: this.token.clientToken
     };
 
-    console.log(`Turning off channel ${channel}.`, payload);
-
     const postChannelOff = this.flameAPI.post(path, payload);
-    postChannelOff.subscribe((res: Response) => {
-      if (res.status === 200) {
-        console.log('Channel successfully turned off.');
-      }
-    });
+    postChannelOff.subscribe();
 
     return postChannelOff;
   }

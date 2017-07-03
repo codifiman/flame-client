@@ -38,11 +38,7 @@ export class FlameAPIService {
       }),
     });
 
-    return this.http.post(this.getUrl(path), JSON.stringify(data), options)
-      .map((res: Response) => {
-        console.log('response', res);
-        return res;
-      });
+    return this.http.post(this.getUrl(path), JSON.stringify(data), options);
   }
 
   getSystemStatus() {

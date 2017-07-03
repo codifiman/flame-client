@@ -15,7 +15,8 @@ export class AppComponent implements DoCheck {
   constructor(private lock: LockService, private fire: FireService) { }
 
   private handleArmEvent(event): void {
-    this.lock.setLock(event);
+    if (event === 'ARM') this.lock.arm()
+    else this.lock.disarm()
   }
 
   private handleFireEvent({ channel, action }): void {

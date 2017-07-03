@@ -10,6 +10,7 @@ import { ClientTokenService } from './client-token/client-token.service';
 import { LockService } from './lock/lock.service';
 import { FlameAPIService } from './flame-api/flame-api.service';
 import { FireService } from './fire/fire.service';
+import { TimeoutService } from './timeout.service';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FireService } from './fire/fire.service';
     ClientTokenService,
     FlameAPIService,
     FireService,
+    TimeoutService
   ],
   bootstrap: [AppComponent]
 })
