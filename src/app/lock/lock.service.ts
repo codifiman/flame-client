@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/concatMap';
+
 import { ClientTokenService } from '../client-token/client-token.service';
 import { FlameAPIService } from '../flame-api/flame-api.service';
 
-type LockState = 'LOCKED' | 'UNLOCKED';
+type LockState = 'LOCKED' | 'UNLOCKED' | 'LOCKED_OUT';
 type LockEvent = 'ARM' | 'DISARM' | 'RESET';
 
 interface LockStatusResponse {
@@ -18,34 +21,52 @@ interface LockStatusResponse {
 
 export const LOCKED: LockState = 'LOCKED';
 export const UNLOCKED: LockState = 'UNLOCKED';
+export const LOCKED_OUT: LockState = 'LOCKED_OUT';
+
 export const ARM: LockEvent = 'ARM';
 export const DISARM: LockEvent = 'DISARM';
 export const RESET: LockEvent = 'RESET';
 
 @Injectable()
 export class LockService {
-  private lockpath: string = '/burner/lock';
-  private lockstate: LockState = UNLOCKED;
+  private lockpath = '/burner/lock';
+  private lockstate = UNLOCKED;
   private timeout;
+  private lockCheckStream: Observable<Response>;
 
   constructor (
     private token: ClientTokenService,
     private flameAPI: FlameAPIService
   ) {
+    this.lockCheckStream = Observable
+      .interval(1000)
+      .concatMap(() => this.flameAPI.get(this.lockpath))
+
     this.getLockStatus();
   }
 
   private getLockStatus(): void {
     this.flameAPI.get(this.lockpath)
-      .subscribe((res) => {
-        if (res.status === 200) {
-          this.lockstate = res.data.state;
+      .subscribe(res => {
+        if (res.data.state === LOCKED) {
+          this.lockstate = LOCKED_OUT;
+          this.pollUntilAvailable();
+        } else {
+          this.lockstate = UNLOCKED;
         }
       });
   }
 
+  private pollUntilAvailable(): void {
+    const subscription = this.lockCheckStream.subscribe(res => {
+      if (res['data'].state === UNLOCKED) {
+        this.lockstate = UNLOCKED;
+        subscription.unsubscribe();
+      }
+    })
+  }
+
   public startTimeout(): void {
-    console.log('starting timeout');
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
@@ -54,7 +75,6 @@ export class LockService {
   }
 
   public stopTimeout(): void {
-    console.log('stopping timeout');
     clearTimeout(this.timeout);
   }
 
@@ -64,53 +84,44 @@ export class LockService {
 
   // Actions
   public setLock(event: LockEvent): void {
-    if (event === ARM) {
-      this.arm();
-      this.startTimeout();
-    }
-
-    else if (event === DISARM) {
-      this.disarm();
-    }
-
-    else {
-      this.lockstate = UNLOCKED;
+    switch (event) {
+      case ARM:
+        this.arm();
+        this.startTimeout();
+        break;
+      case DISARM:
+        this.disarm();
+        break;
+      default:
+        this.lockstate = UNLOCKED;
+        break;
     }
   }
 
   public arm(): Observable<Response> {
-    const payload = {
+    return this.httpReq({
       state:  LOCKED,
       lockId: this.token.clientToken
-    };
-
-    console.log("arming device", payload);
-
-    const postArm = this.flameAPI.post(this.lockpath, payload);
-    postArm.subscribe((res: Response) => {
-        if (res.status === 200) {
-          this.lockstate = payload.state;
-        }
-      });
-
-    return postArm;
+    });
   }
 
   public disarm(): Observable<Response> {
-    const payload = {
+    return this.httpReq({
       state:  UNLOCKED,
       lockId: this.token.clientToken,
-    };
+    });
+  }
 
-    console.log("disarming device", payload);
-
-    const postDisarm = this.flameAPI.post(this.lockpath, payload)
-    postDisarm.subscribe((res: Response) => {
-        if (res.status === 200) {
-          this.lockstate = payload.state;
+  private httpReq(payload): Observable<Response> {
+    const obs = this.flameAPI.post(this.lockpath, payload);
+    obs.subscribe(
+      res => this.lockstate = payload.state,
+      res => {
+        if (res.status === 409) {
+          this.lockstate = LOCKED_OUT;
+          this.pollUntilAvailable();
         }
-      });
-
-    return postDisarm;
+      })
+    return obs;
   }
 }

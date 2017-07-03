@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { ClientTokenService } from './client-token/client-token.service';
 import { LockService } from './lock/lock.service';
 import { FireService } from './fire/fire.service';
@@ -8,15 +8,11 @@ import { FireService } from './fire/fire.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements DoCheck {
   title = 'app';
-  lock: LockService;
-  fire: FireService;
+  lockState;
 
-  constructor(lock: LockService, fire: FireService) {
-    this.lock = lock;
-    this.fire = fire;
-  }
+  constructor(private lock: LockService, private fire: FireService) { }
 
   private handleArmEvent(event): void {
     this.lock.setLock(event);
@@ -24,5 +20,9 @@ export class AppComponent {
 
   private handleFireEvent({ channel, action }): void {
     this.fire.setChannel(channel, action);
+  }
+
+  ngDoCheck() {
+    this.lockState = this.lock.lockState
   }
 }
