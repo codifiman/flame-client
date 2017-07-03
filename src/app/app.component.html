@@ -3,17 +3,17 @@
   <div id="fire-buttons">
     <f-fire-button
       [channel]='0'
-      [lock]="lock.lockState"
+      [lock]="lockState"
       (onEvent)="handleFireEvent($event)">
     </f-fire-button>
     <f-fire-button
       [channel]='1'
-      [lock]="lock.lockState"
+      [lock]="lockState"
       (onEvent)="handleFireEvent($event)">
     </f-fire-button>
     <f-fire-button
       [channel]='2'
-      [lock]="lock.lockState"
+      [lock]="lockState"
       (onEvent)="handleFireEvent($event)">
     </f-fire-button>
   </div>

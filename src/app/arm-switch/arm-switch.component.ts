@@ -37,7 +37,7 @@ export class ArmSwitchComponent {
     return phrases[this.lock] || 'Hello!';
   }
 
-  private toggleButton(): void {
+  toggleButton(): void {
     if (this.lock === LOCKED_OUT) return
 
     if (this.lock === LOCKED) {
