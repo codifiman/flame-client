@@ -27,7 +27,7 @@ export class ArmSwitchComponent {
     return this.lock === LOCKED ? 'Off' : 'Arm';
   }
 
-  private toggleButton(): void {
+  toggleButton(): void {
     if (this.lock === LOCKED_OUT) return
 
     if (this.lock === LOCKED) {
