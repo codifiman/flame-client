@@ -84,7 +84,7 @@ export class LockService {
       this.timeoutService.startTimeout(timeout).subscribe(() => {
         this.lockstate = UNLOCKED;
       });
-    });
+    }, () => { });
 
     return observable;
   }
