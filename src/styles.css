@@ -7,8 +7,11 @@
 html {
   /* colors */
   --grey: hsl(0, 0%, 85%);
-  --blue: hsl(200, 60%, 80%);
-  --orange: hsl(20, 80%, 85%);
+  --blue: hsl(200, 60%, 40%);
+  --med-blue: hsl(200, 60%, 45%);
+  --light-blue: hsl(200, 60%, 80%);
+  --orange: hsl(20, 84%, 55%);
+  --light-orange: hsl(20, 84%, 80%);
   --red: hsl(0, 80%, 50%);
 
   /* typography */
@@ -18,4 +21,9 @@ html {
 body {
   margin: 0;
   padding: 0;
+}
+
+h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
 }

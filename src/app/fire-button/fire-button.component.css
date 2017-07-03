@@ -1,52 +1,97 @@
 :host div {
+  --armed-diameter: 4rem;
+  --disarmed-diameter: 2rem;
+  --on-diameter: 4.5rem;
+  --timeout: 8s;
+
   align-items: center;
-  background-color: var(--blue);
-  border-radius: 1rem;
+  background-color: var(--light-blue);
+  border-radius: calc(0.5 * var(--disarmed-diameter));
   color: white;
   display: inline-flex;
-  height: 2rem;
+  height: var(--disarmed-diameter);
   justify-content: center;
-  margin: 1rem 2rem;
-  transition: all 0.5s;
-  width: 2rem;
+  margin: 1rem var(--disarmed-diameter);
+  position: relative;
+  transition: all 0.3s;
+  transition-timing-function: ease-in-out;
+  width: var(--disarmed-diameter);
+  overflow: hidden;
 }
 
-:host div > * {
-  font-size: 10px;
-  opacity: 0;
-  user-select: none;
-  transition: opacity 0.5s, font-size 0.5s;
+:host:first-child div.armed {
+  transition-delay: 0s;
+}
+
+:host:first-child div:not(.armed) {
+  transition-delay: 0.2s;
+}
+
+:host:nth-child(2) div {
+  transition-delay: 0.1s;
+}
+
+:host:nth-child(3) div.armed {
+  transition-delay: 0.2s;
+}
+
+:host:nth-child(3) div:not(.armed) {
+  transition-delay: 0s;
 }
 
 :host div.armed {
   background-color: var(--orange);
-  border-radius: 2rem;
-  height: 4rem;
-  margin: 0 1rem;
-  width: 4rem;
+  border-radius: calc(0.5 * var(--armed-diameter));
+  box-shadow: 0px 3px 3px hsla(0, 0%, 20%, 0.2);
+  height: var(--armed-diameter);
+  margin: 1rem;
+  width: var(--armed-diameter);
 }
 
-:host div.armed > * {
+:host div.armed.on {
+  animation-name: fade;
+  animation-duration: 8s;
+  animation-timing-function: ease-out;
+  transition-delay: 0s;
+}
+
+:host div.armed > h3 {
   font-size: 24px;
   opacity: 1;
 }
 
-:host div.armed.on {
-  animation-name: flicker;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
+:host div.armed.on > h3 {
+  opacity: 0;
 }
 
-@keyframes flicker {
-  0% {
-    background-image: radial-gradient(circle at center, var(--blue) 0, var(--yellow) 30%, var(--orange) 60%);
+@keyframes fade {
+  3% {
+    background-color: var(--red);
+    transform: scale(1.1, 1.1);
   }
 
-  50% {
-    background-image: radial-gradient(circle at center, var(--blue) 0, var(--yellow) 40%, var(--orange) 80%);
+  80% {
+    background-color: var(--red);
+  }
+
+  97% {
+    transform: scale(1.1, 1.1)
   }
 
   100% {
-    background-image: radial-gradient(circle at center, var(--blue) 0, var(--yellow) 30%, var(--orange) 60%);
+    background-color: var(--orange);
+    transform: scale(1, 1);
   }
+}
+
+:host h3 {
+  font-size: 10px;
+  opacity: 0;
+  user-select: none;
+  transition-timing-function: ease-in-out;
+  transition: opacity 0.5s, font-size 0.5s;
+}
+
+:host h3:hover {
+  cursor: default;
 }

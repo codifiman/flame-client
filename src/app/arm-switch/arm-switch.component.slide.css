@@ -1,0 +1,15 @@
+/* arm-switch.component.slide */
+
+:host #slide {
+  border-radius: 0.35em;
+  border: solid 0.1em var(--light-blue);
+  height: 0.5em;
+  margin: 2em 0;
+  position: relative;
+  transition: all 0.5s;
+  width: 18em;
+}
+
+:host .armed #slide {
+  border-color: var(--light-orange);
+}

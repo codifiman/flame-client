@@ -9,7 +9,11 @@ type Action = 'ARM' | 'DISARM' | 'RESET';
 @Component({
   selector:    'f-arm-switch',
   templateUrl: './arm-switch.component.html',
-  styleUrls:   ['./arm-switch.component.css']
+  styleUrls:   [
+    './arm-switch.component.slide.css',
+    './arm-switch.component.slider.css',
+    './arm-switch.component.css'
+  ]
 })
 export class ArmSwitchComponent {
   @Input() lock: LockState;
@@ -24,7 +28,13 @@ export class ArmSwitchComponent {
   }
 
   get buttonText(): string {
-    return this.lock === LOCKED ? 'Off' : 'Arm';
+    const phrases = {
+      [LOCKED]: 'Armed',
+      [UNLOCKED]: 'Inactive',
+      [LOCKED_OUT]: 'Busy',
+    };
+
+    return phrases[this.lock] || 'Hello!';
   }
 
   private toggleButton(): void {
