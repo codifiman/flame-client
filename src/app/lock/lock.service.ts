@@ -38,11 +38,11 @@ export class LockService {
     private token: ClientTokenService,
     private flameAPI: FlameAPIService
   ) {
-    this.getLockStatus();
-
     this.lockCheckStream = Observable
       .interval(1000)
       .concatMap(() => this.flameAPI.get(this.lockpath))
+
+    this.getLockStatus();
   }
 
   private getLockStatus(): void {
