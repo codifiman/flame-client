@@ -28,16 +28,8 @@ export class FireService {
   public setChannel(channel, action): void {
     if (action === FIRE) {
       this.turnChannelOn(channel);
-      this.lock.stopTimeout();
-    }
-
-    else if (action === RELEASE) {
+    } else if (action === RELEASE) {
       this.turnChannelOff(channel);
-      this.lock.startTimeout();
-    }
-
-    else {
-      this.lock.startTimeout();
     }
   }
 

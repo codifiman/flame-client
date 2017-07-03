@@ -8,6 +8,7 @@ import 'rxjs/add/operator/concatMap';
 
 import { ClientTokenService } from '../client-token/client-token.service';
 import { FlameAPIService } from '../flame-api/flame-api.service';
+import { TimeoutService } from '../timeout.service';
 
 type LockState = 'LOCKED' | 'UNLOCKED' | 'LOCKED_OUT';
 type LockEvent = 'ARM' | 'DISARM' | 'RESET';
@@ -27,16 +28,18 @@ export const ARM: LockEvent = 'ARM';
 export const DISARM: LockEvent = 'DISARM';
 export const RESET: LockEvent = 'RESET';
 
+const ONE_SECOND = 1000;
+
 @Injectable()
 export class LockService {
   private lockpath = '/burner/lock';
   private lockstate = UNLOCKED;
-  private timeout;
   private lockCheckStream: Observable<Response>;
 
   constructor (
     private token: ClientTokenService,
-    private flameAPI: FlameAPIService
+    private flameAPI: FlameAPIService,
+    private timeoutService: TimeoutService
   ) {
     this.lockCheckStream = Observable
       .interval(1000)
@@ -66,43 +69,24 @@ export class LockService {
     })
   }
 
-  public startTimeout(): void {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-
-    this.timeout = setTimeout(() => this.lockstate = UNLOCKED, 10000);
-  }
-
-  public stopTimeout(): void {
-    clearTimeout(this.timeout);
-  }
-
   public get lockState(): LockState {
     return this.lockstate;
   }
 
-  // Actions
-  public setLock(event: LockEvent): void {
-    switch (event) {
-      case ARM:
-        this.arm();
-        this.startTimeout();
-        break;
-      case DISARM:
-        this.disarm();
-        break;
-      default:
-        this.lockstate = UNLOCKED;
-        break;
-    }
-  }
-
   public arm(): Observable<Response> {
-    return this.httpReq({
+    const observable =  this.httpReq({
       state:  LOCKED,
       lockId: this.token.clientToken
     });
+
+    observable.subscribe(res => {
+      const timeout = res['timeout'] * .9 * ONE_SECOND;
+      this.timeoutService.startTimeout(timeout).subscribe(() => {
+        this.lockstate = UNLOCKED;
+      });
+    });
+
+    return observable;
   }
 
   public disarm(): Observable<Response> {
