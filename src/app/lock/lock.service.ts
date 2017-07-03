@@ -79,7 +79,7 @@ export class LockService {
       lockId: this.token.clientToken
     });
 
-    observable.subscribe(res => {
+    observable.map(res => res.json()).subscribe(res => {
       const timeout = res['timeout'] * .9 * ONE_SECOND;
       this.timeoutService.startTimeout(timeout).subscribe(() => {
         this.lockstate = UNLOCKED;

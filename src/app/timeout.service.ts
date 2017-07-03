@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/take';
 
 @Injectable()
 export class TimeoutService {
@@ -14,7 +13,7 @@ export class TimeoutService {
   startTimeout(duration: number): Observable<void> {
     this.duration = duration;
     this.startTime = new Date().getTime();
-    this.observable = Observable.timer(duration).take(1);
+    this.observable = Observable.timer(duration);
     return this.observable;
   }
 
@@ -22,6 +21,7 @@ export class TimeoutService {
     const now = new Date().getTime();
     const remainingTime = this.startTime + this.duration - now;
     this.startTime = now;
-    this.observable.delay(this.duration - remainingTime);
+    const delay = this.duration - remainingTime;
+    this.observable.delay(delay);
   }
 }
