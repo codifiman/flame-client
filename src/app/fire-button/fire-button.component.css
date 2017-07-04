@@ -7,7 +7,7 @@
   align-items: center;
   background-color: var(--light-blue);
   border-radius: calc(0.5 * var(--disarmed-diameter));
-  color: white;
+  color: var(--white);
   display: inline-flex;
   height: var(--disarmed-diameter);
   justify-content: center;
@@ -90,6 +90,7 @@
   user-select: none;
   transition-timing-function: ease-in-out;
   transition: opacity 0.5s, font-size 0.5s;
+  letter-spacing: 0;
 }
 
 :host h3:hover {

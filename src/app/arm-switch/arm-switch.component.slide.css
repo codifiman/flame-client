@@ -8,7 +8,7 @@
 }
 :host #slide {
   border-radius: var(--slide-radius);
-  background: white;
+  background: transparent;
   border: solid 3px var(--light-blue);
   height: var(--slide-height);
   margin: 2em 0;
