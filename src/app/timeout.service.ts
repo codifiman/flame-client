@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/delay';
-
 @Injectable()
 export class TimeoutService {
   private duration: number;
@@ -11,17 +8,29 @@ export class TimeoutService {
   private observable: Observable<any>;
 
   startTimeout(duration: number): Observable<void> {
-    this.duration = duration;
-    this.startTime = new Date().getTime();
-    this.observable = Observable.timer(duration);
-    return this.observable;
+    this.startTime = new Date().getTime()
+    this.duration = duration
+
+    if (this.observable) return this.observable
+
+    this.observable = new Observable(subscriber => {
+      function onTimeout() {
+        const now = new Date().getTime()
+        const remainingTime = this.startTime + duration - now
+        if (remainingTime > 0) {
+          setTimeout(onTimeout.bind(this), remainingTime)
+        } else {
+          subscriber.next()
+          subscriber.complete()
+        }
+      }
+      setTimeout(onTimeout.bind(this), duration)
+    })
+
+    return this.observable
   }
 
   resetTimeout(): void {
-    const now = new Date().getTime();
-    const remainingTime = this.startTime + this.duration - now;
-    this.startTime = now;
-    const delay = this.duration - remainingTime;
-    this.observable.delay(delay);
+    this.startTime = new Date().getTime()
   }
 }
