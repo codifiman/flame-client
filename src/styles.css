@@ -24,6 +24,7 @@ body {
   overflow: hidden;
   padding: 0;
   width: 100vw;
+  position: fixed;
 }
 
 h3 {
