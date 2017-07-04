@@ -22,7 +22,7 @@
   background-color: var(--blue);
   border: solid 0.1em var(--blue);
   border-radius: 1.6em;
-  box-shadow: 0px 3px 3px hsla(0, 0%, 20%, 0.2);
+  box-shadow: 0px 4px 4px hsla(0, 0%, 0%, 0.2);
   transition: all 0.5s;
 }
 
@@ -32,12 +32,12 @@
 }
 
 :host .lockedout #slider::before {
-  background-color: white;
+  background-color: var(--black);
   border-color: var(--light-blue);
   border-radius: 0;
   box-shadow: none;
   height: 0.75em;
   transform: rotate(-45deg);
   width: 0.75em;
-  margin-top: 1em;
+  margin-top: 1.1em;
 }

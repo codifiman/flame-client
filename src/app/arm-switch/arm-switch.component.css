@@ -12,5 +12,7 @@
 }
 
 :host h3 {
+  color: var(--white);
+  margin-top: 3.5em;
   text-align: center;
 }

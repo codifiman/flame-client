@@ -6,12 +6,12 @@
 
 html {
   /* colors */
-  --grey: hsl(0, 0%, 85%);
-  --blue: hsl(200, 60%, 40%);
-  --med-blue: hsl(200, 60%, 45%);
-  --light-blue: hsl(200, 60%, 80%);
+  --black: hsl(0, 0%, 10%);
+  --white: hsla(0, 0%, 100%, 0.8);
+  --blue: hsl(200, 40%, 30%);
+  --light-blue: hsl(200, 30%, 40%);
   --orange: hsl(20, 84%, 55%);
-  --light-orange: hsl(20, 84%, 80%);
+  --light-orange: hsl(20, 50%, 70%);
   --red: hsl(0, 80%, 50%);
 
   /* typography */
@@ -19,12 +19,13 @@ html {
 }
 
 body {
+  background-color: var(--black);
   height: 100vh;
   margin: 0;
   overflow: hidden;
   padding: 0;
-  width: 100vw;
   position: fixed;
+  width: 100vw;
 }
 
 h3 {
