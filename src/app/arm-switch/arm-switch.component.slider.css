@@ -2,19 +2,18 @@
 
 :host #slider, :host #slider::before {
   height: var(--slider-diameter);
-  position: absolute;
+  position: relative;
   width: var(--slider-diameter);
 }
 
 /* base component for function (x-translation w/ transition) */
 :host #slider {
-  left: 0;
-  top: -1.2em;
-  transition: left 0.5s;
+  top: -1.3em;
 }
 
-:host .armed #slider {
-  left: calc(100% - 3.15em);
+:host .ready #slider, :host .lockedout #slider {
+  transition: left 0.5s;
+  left: 0 !important;
 }
 
 :host #slider::before {

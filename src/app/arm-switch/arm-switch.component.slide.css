@@ -7,7 +7,7 @@
   margin: 2em 0;
   position: relative;
   transition: all 0.5s;
-  width: 18em;
+  width: 15em;
 }
 
 :host .armed #slide {
