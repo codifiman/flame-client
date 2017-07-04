@@ -1,6 +1,10 @@
 <div [ngClass]="buttonClasses">
   <div id="slide">
-    <div id="slider" (click)="toggleButton()"></div>
+    <div id="slider"
+      (touchstart)="startDrag($event)"
+      (mousedown)="startDrag($event)"
+    >
+    </div>
   </div>
   <h3>{{buttonText}}</h3>
 </div>

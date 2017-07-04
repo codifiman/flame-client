@@ -1,0 +1,43 @@
+/* arm-switch.component.slider */
+
+:host #slider, :host #slider::before {
+  height: var(--slider-diameter);
+  position: relative;
+  width: var(--slider-diameter);
+}
+
+/* base component for function (x-translation w/ transition) */
+:host #slider {
+  top: -1.3em;
+}
+
+:host .ready #slider, :host .lockedout #slider {
+  transition: left 0.5s;
+  left: 0 !important;
+}
+
+:host #slider::before {
+  content: '';
+  display: block;
+  background-color: var(--blue);
+  border: solid 0.1em var(--blue);
+  border-radius: 1.6em;
+  box-shadow: 0px 3px 3px hsla(0, 0%, 20%, 0.2);
+  transition: all 0.5s;
+}
+
+:host .armed #slider::before {
+  border-color: var(--orange);
+  background-color: var(--orange);
+}
+
+:host .lockedout #slider::before {
+  background-color: white;
+  border-color: var(--light-blue);
+  border-radius: 0;
+  box-shadow: none;
+  height: 0.75em;
+  transform: rotate(-45deg);
+  width: 0.75em;
+  margin-top: 1em;
+}
