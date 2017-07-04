@@ -10,8 +10,10 @@
 }
 
 :host #fire-buttons {
+  align-items: center;
   display: flex;
-  width: 100vw;
+  height: 4em;
   justify-content: center;
-  height: 8em;
+  margin-top: 2em;
+  width: 100vw;
 }

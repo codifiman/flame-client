@@ -1,0 +1,36 @@
+/* arm-switch.component.slide */
+
+:host {
+  --slide-width: 15em;
+  --slide-height: 10px;
+  --slide-radius: 8px;
+  --orange-border: solid 3px var(--light-orange);
+}
+:host #slide {
+  border-radius: var(--slide-radius);
+  background: white;
+  border: solid 3px var(--light-blue);
+  height: var(--slide-height);
+  margin: 2em 0;
+  position: relative;
+  transition: all 0.5s;
+  width: var(--slide-width);
+}
+
+:host #slide::before {
+  border-radius: 0 var(--slide-radius) var(--slide-radius) 0;;
+  border-bottom: var(--orange-border);
+  border-right: var(--orange-border);
+  border-top: var(--orange-border);
+  content: '';
+  display: block;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  height: var(--slide-height);
+  width: calc(0.25 * var(--slide-width));
+}
+
+:host .armed #slide {
+  border-color: var(--light-orange);
+}
