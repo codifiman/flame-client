@@ -23,7 +23,7 @@ export class FireButtonComponent {
   @Input() channel: number;
   @Output() onEvent = new EventEmitter<Action>();
 
-  private get buttonClasses(): object {
+  get buttonClasses(): object {
     return {
       armed: this.lock === LOCKED,
       on:    this.channelOn,
@@ -35,7 +35,7 @@ export class FireButtonComponent {
     e.stopPropagation && e.stopPropagation();
   }
 
-  private turnOn(event): void {
+  turnOn(event): void {
     this.prevent(event);
 
     if (this.lock === LOCKED && !this.channelOn) {
@@ -45,7 +45,7 @@ export class FireButtonComponent {
     }
   }
 
-  private turnOff(event): void {
+  turnOff(event): void {
     this.prevent(event);
 
     if (this.lock === LOCKED && this.channelOn) {

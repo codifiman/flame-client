@@ -14,12 +14,12 @@ export class AppComponent implements DoCheck {
 
   constructor(private lock: LockService, private fire: FireService) { }
 
-  private handleArmEvent(event): void {
+  handleArmEvent(event): void {
     if (event === 'ARM') this.lock.arm()
     else this.lock.disarm()
   }
 
-  private handleFireEvent({ channel, action }): void {
+  handleFireEvent({ channel, action }): void {
     this.fire.setChannel(channel, action);
   }
 
