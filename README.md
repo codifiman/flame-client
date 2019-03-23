@@ -1,4 +1,5 @@
 # FlameClient
+Intended to be used in conjunction with [Flame API](https://github.com/delta62/flame-api).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.2.
 
